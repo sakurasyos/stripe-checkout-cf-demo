@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stripe Checkout Demo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f7f8fc;
+      max-width: 720px;
+      margin: 40px auto;
+      line-height: 1.6;
+      color: #222;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    button {
+      background: #635bff;
+      color: #fff;
+      border: 0;
+      border-radius: 8px;
+      padding: 14px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #544cf5;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Stripe Checkout デモ</h1>
+    <p>Cloudflare Pages + Functions を使った最小デモです。</p>
+    <p>商品名：研修用デモ商品</p>
+    <p>価格：500円</p>
+    <button id="checkout-button">購入する</button>
+  </div>
+
+  <script>
+    document.getElementById("checkout-button").addEventListener("click", async () => {
+      const res = await fetch("/create-checkout-session", {
+        method: "POST"
+      });
+      const data = await res.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Checkout Session の作成に失敗しました");
+        console.error(data);
+      }
+    });
+  </script>
+</body>
+</html>
